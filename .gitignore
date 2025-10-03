@@ -1,2 +1,5 @@
 *zip
 data/flight_train
+prc_fuel_burnt
+.DS_Store
+*.parquet
