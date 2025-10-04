@@ -119,7 +119,9 @@ def haversine(lat1, lon1, lat2, lon2):
     return 2 * R * np.arcsin(np.sqrt(a))
 
 # Optional: subset for quick testing
-# df_fuel = df_fuel[:10000]
+# df_fuel = df_fuel[:1]
+
+# %%
 
 # ---- function to process a single fuel_row ----
 def process_flight_row(fuel_row):
@@ -195,3 +197,92 @@ for ax, t in zip(axes, types):
 
 plt.tight_layout()
 plt.show()
+
+# %%
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import pandas as pd
+import os
+
+# Number of random flights to plot
+N = min(20, len(df_fuel))  # adjust as needed
+sample_rows = df_fuel.sample(n=N, random_state=42)
+
+# Ensure output directory exists
+os.makedirs("figures", exist_ok=True)
+
+counter = 0
+
+for _, fuel_row in sample_rows.iterrows():
+    counter += 1
+    flight_id = fuel_row["flight_id"]
+    start_time = fuel_row["start"]
+    end_time = fuel_row["end"]
+
+    file_path = os.path.join(FLIGHT_PATH, f"{flight_id}.parquet")
+    if not os.path.exists(file_path):
+        print(f"⚠️ Missing file for {flight_id}")
+        continue
+
+    # --- Read the flight data ---
+    df_sub = pd.read_parquet(file_path)
+    df_sub["timestamp"] = pd.to_datetime(df_sub["timestamp"])
+
+    # Find closest start/end indices
+    start_idx = (df_sub["timestamp"] - start_time).abs().argmin()
+    end_idx = (df_sub["timestamp"] - end_time).abs().argmin()
+
+    start_point = df_sub.iloc[start_idx]
+    end_point = df_sub.iloc[end_idx]
+
+    # --- Create subplots ---
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=False)
+    fig.suptitle(f"Flight {flight_id} — {df_sub['typecode'].iloc[0]}", fontsize=12, y=0.96)
+
+    # --- Plot 1: Flight path (Lat vs Lon) ---
+    for src, sub_src in df_sub.groupby("source"):
+        color = "red" if src.lower() == "acars" else "blue"
+        ax1.plot(sub_src["longitude"], sub_src["latitude"], color=color, alpha=0.5, linewidth=1.2, label=src.upper())
+
+    # Start (black) and End (magenta)
+    ax1.scatter(start_point["longitude"], start_point["latitude"], color="black", s=50, zorder=5, label="Start")
+    ax1.scatter(end_point["longitude"], end_point["latitude"], color="#ff00ff", s=50, zorder=5, label="End")
+
+    ax1.set_xlabel("Longitude")
+    ax1.set_ylabel("Latitude")
+    ax1.set_title("Flight Path (Blue = ADSB, Red = ACARS)")
+    ax1.legend()
+    ax1.grid(True, linestyle="--", alpha=0.5)
+
+    # --- Plot 2: Altitude vs Time ---
+    for src, sub_src in df_sub.groupby("source"):
+        color = "red" if src.lower() == "acars" else "blue"
+        ax2.plot(sub_src["timestamp"], sub_src["altitude"], color=color, alpha=0.5, linewidth=1.2, label=src.upper())
+
+    ax2.axvline(start_point["timestamp"], color="black", linestyle="--", label="Start")
+    ax2.axvline(end_point["timestamp"], color="#ff00ff", linestyle="--", label="End")
+
+    ax2.set_xlabel("Timestamp (UTC)")
+    ax2.set_ylabel("Altitude (ft or m)")
+    ax2.set_title("Altitude vs Time")
+    ax2.legend()
+    ax2.grid(True, linestyle="--", alpha=0.5)
+
+    # Format timestamps on x-axis
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d\n%H:%M:%S"))
+    plt.setp(ax2.get_xticklabels(), rotation=45, ha="right")
+
+    # Add note about timestamp format
+    ax2.text(
+        0.99, -0.25,
+        "Timestamp format: YYYY-MM-DD HH:MM:SS (UTC)",
+        transform=ax2.transAxes,
+        ha="right", va="center",
+        fontsize=9, color="gray"
+    )
+
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+    # Save figure
+    plt.savefig(f"figures/{counter:03d}_randsample.png", dpi=150)
+    plt.show()
