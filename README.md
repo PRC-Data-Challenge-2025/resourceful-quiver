@@ -20,7 +20,7 @@ training
 TODO -->
 
 ### Folder structure
-.
+.  
 ├── data  
 ├── models  
 ├── notebooks  
