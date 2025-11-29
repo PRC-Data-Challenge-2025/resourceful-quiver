@@ -21,15 +21,15 @@ TODO -->
 
 ### Folder structure
 .
-├── data
-├── models
-├── notebooks
-├── pyproject.toml
-├── README.md
-├── resourceful-quiver-patch.png
-├── scripts
-├── src
-└── WhatToDo.MD
+├── data  
+├── models  
+├── notebooks  
+├── pyproject.toml  
+├── README.md  
+├── resourceful-quiver-patch.png  
+├── scripts  
+├── src  
+└── WhatToDo.MD  
 
 `data` directory should contain all files and folders downloaded from `prc-2025-datasets`  
 `scripts` directory has some scripts to run the preprocessing pipeline and creating the model training dataframe
