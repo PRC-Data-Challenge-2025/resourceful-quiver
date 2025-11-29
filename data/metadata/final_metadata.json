@@ -1,5 +1,5 @@
 {
-  "description": "Use physical features. ADSB + ACARS + Wind + Vrate + Mass. ff_kgs filter. n_estimators 5000",
+  "description": "Use physical features. ADSB + ACARS + Vrate + Heuristic Mass. ff_kgs filter. n_estimators 7500",
   "cols_to_take": [
     "seg_duration",
     "seg_dist",
