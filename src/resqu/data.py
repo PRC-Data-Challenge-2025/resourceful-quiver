@@ -13,6 +13,7 @@ rank_traj_dir = data_dir / "flights_rank"
 final_traj_dir = data_dir / "flights_final"
 log_dir = parent_dir / "logs"
 checkpoint_dir = parent_dir / "checkpoints"
+metadata_dir = data_dir / 'metadata'
 
 if (data_dir / "fuel_train_updated.parquet").exists():
     fuel_train_data = pd.read_parquet(data_dir / "fuel_train_updated.parquet")

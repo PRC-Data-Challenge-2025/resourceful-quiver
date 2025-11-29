@@ -33,6 +33,8 @@ TODO -->
 
 `data` directory should contain all files and folders downloaded from `prc-2025-datasets`  
 `scripts` directory has some scripts to run the preprocessing pipeline and creating the model training dataframe
+`models` contain the lgbm mass estimation model using 24 features `lgbm_mass_estim_24_feat.pkl`
+
 
 ### Prepare dataset
 #### Running preprocessing
@@ -44,7 +46,7 @@ v2 pipeline: `python ./scripts/preproc_v2.py -j <number of parallel processes> -
 v2 pipeline with wind: `python ./scripts/preproc_v2_wind.py -j 20 -s <train | rank | final>` make sure to change the local-store of presynced fastmeteo data  
 if there is any issue on how to run the scripts, use the `-h` flag for help
 
-The best ranking score uses `preproc_v2_wind.py`  
+The best ranking score uses `preproc_v2.py`  
 
 #### Create LGBM dataset
 After running preprocessing for all dataset (train, rank, final)
@@ -52,7 +54,8 @@ run `python ./scripts/create_lgbm_data.py -v <your choice of version>`
 3 parquet file should be saved to `data/lgbm_dataset/`  
 
 ### Training
-TODO
+checkout `notebooks/TrainModelAndSubmit.ipynb`
+
 
 
 ### Extra stuff
