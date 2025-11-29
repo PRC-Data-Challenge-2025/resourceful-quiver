@@ -1,0 +1,21 @@
+[project]
+name = "resqu"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "fastmeteo",
+    "torch",
+    "lightgbm",
+    "scikit-learn",
+    "scipy",
+]
+
+[project.scripts]
+resqu-preproc = "resqu.cli:preproc_main"
+resqu-make-dataset = "resqu.cli:make_dataset_main"

@@ -1,7 +1,18 @@
-*zip
-data/flight_train
-data/*parquet
-prc_fuel_burnt
-.DS_Store
-*.parquet
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+data/
+logs/
 figures/
+.vscode/
+**/__pycache__
+models/
+checkpoints/
