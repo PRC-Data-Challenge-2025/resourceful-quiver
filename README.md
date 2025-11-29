@@ -1,22 +1,61 @@
 # resqu
-Team Resourceful-Quiver
+Team Resourceful-Quiver 
+<img src="resourceful-quiver-patch.png" alt="Team Resourceful-Quiver
+" width="150" height="150">
 
-### install
+## See our report here
+[TODO]()
+
+### Install
+We recommend using a virtual environment to install the package
 `pip install -e .`
 or 
 `uv pip install -e .`
 
-### cli
+<!-- ### cli
 preprocessing
 `resqu-preproc --help`
 
 training
+TODO -->
+
+### Folder structure
+.
+├── data
+├── models
+├── notebooks
+├── pyproject.toml
+├── README.md
+├── resourceful-quiver-patch.png
+├── scripts
+├── src
+└── WhatToDo.MD
+
+`data` directory should contain all files and folders downloaded from `prc-2025-datasets`  
+`scripts` directory has some scripts to run the preprocessing pipeline and creating the model training dataframe
+
+### Prepare dataset
+#### Running preprocessing
+activate your virtual environmnet, change directory to the project folder, e.g. `cd PRC-2025`
+
+v0 pipeline: `python ./scripts/preproc_v0.py -j <number of parallel processes> -s <train | rank | final>`  
+v0 pipeline with wind: `python ./scripts/preproc_v0_wind.py -j 20 -s <train | rank | final>` make sure to change the local-store of presynced fastmeteo data  
+v2 pipeline: `python ./scripts/preproc_v2.py -j <number of parallel processes> -s <train | rank | final>`  
+v2 pipeline with wind: `python ./scripts/preproc_v2_wind.py -j 20 -s <train | rank | final>` make sure to change the local-store of presynced fastmeteo data  
+if there is any issue on how to run the scripts, use the `-h` flag for help
+
+The best ranking score uses `preproc_v2_wind.py`  
+
+#### Create LGBM dataset
+After running preprocessing for all dataset (train, rank, final)
+run `python ./scripts/create_lgbm_data.py -v <your choice of version>` 
+3 parquet file should be saved to `data/lgbm_dataset/`  
+
+### Training
 TODO
 
-### folder structure
-q
 
-### tips
+### Extra stuff
 `resqu.data` should have all the directories and metadata loaded  
 `resqu.plotter` has some function to visualize the trajectory by flight_id or flight_df
 all path to directories are `pathlib.Path`, which should make globing and getting specific file ergonomic  
