@@ -4,7 +4,7 @@ Team Resourceful-Quiver
 " width="150" height="150">
 
 ## See our report here
-[TODO]()
+[PRC 2025 Report](https://github.com/meldorr/PRC-2025/blob/main/PRC_2025_report.pdf)
 
 ### Install
 We recommend using a virtual environment to install the package
